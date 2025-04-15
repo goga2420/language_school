@@ -25,7 +25,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, "Poetsen One", sans-serif;
 }
-h2{
+
+h2 {
   font-family: "Poetsen One", sans-serif;
+}
+
+h1 {
+  font-family: "Poetsen One", sans-serif;
+  font-weight: 700;
 }
 
