@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image";
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronUp, Globe } from "lucide-react";
 
 export default function Home() {
   const [selected, setSelected] = useState("Русский");
@@ -9,7 +9,7 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
 
   const languages = ["РУССКИЙ", "ENGLISH", "ESPAÑOL"];
-  const current_lang = ["ЯЗЫК САЙТА: ", "WEBSITE LANGUAGE: ", "IDIOMA DEL SITIO: "]
+  const current_lang = ["ЯЗЫК САЙТА: ", "WEBSITE LANGUAGE: ", "IDIOMA DEL SITIO: "];
   return (
     <div className="bg-white">
       <header className="flex justify-between">
@@ -20,19 +20,21 @@ export default function Home() {
         <div className="flex justify-left items-center">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="inline-flex items-center text-black justify-center mr-4 w-60 px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none cursor-pointer"
+            className={`inline-flex items-center text-black justify-center mr-4 w-60 max-md:w-40 px-4 py-2 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none cursor-pointer transition duration-200
+            ${isOpen ? "rounded-b-none border-b-0" : ""}`}
           >
 
             <div className="flex items-center text-xs text-black">
-              <span className="mr-4">{selectedCurrent}</span>
+              <span className="max-md:hidden mr-4">{selectedCurrent}</span>
+              <Globe className="w-4 h-4 mr-2 hidden max-md:block" />
               <span>{selected}</span>
               
             </div>
-            <ChevronDown className="w-4 h-4 ml-2" />
+            {isOpen ? <ChevronUp className="w-4 h-4 ml-2" /> : <ChevronDown className="w-4 h-4 ml-2" />}
           </button>
 
         {isOpen && (
-          <ul className="absolute z-10 mt-38 w-40  bg-white border border-gray-200 rounded-lg shadow-lg">
+          <ul className="absolute z-10 mt-38 w-60 max-md:w-40 bg-white border border-gray-200 border-t-0 rounded-lg rounded-t-none shadow-lg">
             {languages.map((lang, i) => (
               <li
                 key={lang}
@@ -41,7 +43,7 @@ export default function Home() {
                   setSelectedCurrent(current_lang[i]);
                   setIsOpen(false);
                 }}
-                className={`px-4 py-2 text-black cursor-pointer hover:bg-gray-100 ${
+                className={`px-4 py-2 text-black cursor-pointer hover:bg-gray-100 transition duration-200 ${
                   lang === selected ? "bg-gray-100 font-medium" : ""
                 }`}
               >
@@ -58,9 +60,9 @@ export default function Home() {
             <div className="font-bold">
               <h2 >Запишитесь на пробное занятие в IT-Школе</h2>
             </div>
-            <div className="flex flex-col gap-2">
-             <button className="bg-[#e6f0fc] px-4 py-2 text-[#2A63A4] text-3xs border border-[#2A63A4] shadow-lg shadow-[#2A63A4] rounded-lg shadow-sm transition duration-500 ease-in-out hover:bg-[#2A63A4] hover:text-white cursor-pointer"> НАЧАТЬ </button>
-             <button className="bg-[#ffeee3] px-4 py-2 text-[#d66e29] text-3xs border border-[#d66e29] shadow-lg shadow-[#d66e29] rounded-lg shadow-sm transition duration-500 ease-in-out hover:bg-[#d66e29] hover:text-white cursor-pointer"> У МЕНЯ УЖЕ ЕСТЬ АККАУНТ </button>
+            <div className="flex flex-col gap-3 items-center">
+             <button className="w-96 bg-[#e6f0fc] px-4 py-2 text-[#2A63A4] text-3xs border border-[#2A63A4] shadow-lg shadow-[#2A63A4] rounded-lg shadow-sm transition duration-500 ease-in-out hover:bg-[#2A63A4] hover:text-white cursor-pointer"> НАЧАТЬ </button>
+             <button className="w-96 bg-[#ffeee3] px-4 py-2 text-[#d66e29] text-3xs border border-[#d66e29] shadow-lg shadow-[#d66e29] rounded-lg shadow-sm transition duration-500 ease-in-out hover:bg-[#d66e29] hover:text-white cursor-pointer"> У МЕНЯ УЖЕ ЕСТЬ АККАУНТ </button>
              </div>
           </div>
       </div>

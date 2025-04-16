@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -27,11 +28,13 @@ body {
 }
 
 h2 {
-  font-family: "Poetsen One", sans-serif;
+  font-family: "Rubik", sans-serif;
+  font-size: 20;
 }
 
 h1 {
-  font-family: "Poetsen One", sans-serif;
-  font-weight: 700;
+  font-family: "Rubik", sans-serif;
+  font-weight: 500;
+  font-size: 24;
 }
 
