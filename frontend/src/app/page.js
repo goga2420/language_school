@@ -1,12 +1,38 @@
 "use client"
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp, Globe } from "lucide-react";
+
 
 export default function Home() {
   const [selected, setSelected] = useState("Русский");
   const [selectedCurrent, setSelectedCurrent] = useState("ЯЗЫК САЙТА");
   const [isOpen, setIsOpen] = useState(false);
+  const [svgLink, setSvgLink] = useState('/robot.svg');
+
+  const [isWebKit, setIsWebKit] = useState(false);
+
+  useEffect(() => {
+    const ua = navigator.userAgent;
+    const isWebKitBrowser = /AppleWebKit/.test(ua) && !/Chrome/.test(ua);
+    setIsWebKit(isWebKitBrowser);
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if(isWebKit) {
+        setSvgLink(`/robot_amb.svg?${Date.now()}`); 
+      }
+      else {
+        setSvgLink(`/robot_start.svg?${Date.now()}`); // update svgLink after 3 seconds
+        setTimeout(() => {
+          setSvgLink(`/robot_amb.svg?${Date.now()}`); // update svgLink after 3 seconds
+        }, 2500); // 3000 milliseconds = 3 seconds
+      }
+    }, 3500) // 3000 milliseconds = 3 seconds
+
+
+  }, [isWebKit]);
 
   const languages = ["РУССКИЙ", "ENGLISH", "ESPAÑOL"];
   const current_lang = ["ЯЗЫК САЙТА: ", "WEBSITE LANGUAGE: ", "IDIOMA DEL SITIO: "];
@@ -55,7 +81,7 @@ export default function Home() {
         </div>
       </header>
       <div className="flex bg-white max-md:flex-col flex-row text-center justify-center items-center gap-[50px] p-20 ">
-          <Image src="/robot_amb.svg" width={300} height={300} alt="robot" />
+          <Image src={svgLink} width={300} height={300} alt="robot" />
           <div className="flex flex-col gap-10 m-10">
             <div className="font-bold">
               <h2 >Запишитесь на пробное занятие в IT-Школе</h2>
