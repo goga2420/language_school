@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ChevronDown, ChevronUp, Globe } from "lucide-react";
 
 
@@ -10,6 +10,9 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [svgLink, setSvgLink] = useState('/robot.svg');
   const [fadeIn, setFadeIn] = useState(false);
+
+  const containerRef = useRef(null);
+  const [svgContent, setSvgContent] = useState(null);
 
   const [isWebKit, setIsWebKit] = useState(false);
 
@@ -27,17 +30,77 @@ export default function Home() {
     setTimeout(() => {
       if(isWebKit) {
         setSvgLink(`/robot_amb.svg?${Date.now()}`); 
+        fetch(`/robot_amb.svg?${Date.now()}`)
+          .then(res => res.text())
+          .then(setSvgContent);
       }
       else {
         setSvgLink(`/robot_start.svg?${Date.now()}`); // update svgLink after 3 seconds
         setTimeout(() => {
           setSvgLink(`/robot_amb.svg?${Date.now()}`); // update svgLink after 3 seconds
+          fetch(`/robot_amb.svg?${Date.now()}`)
+          .then(res => res.text())
+          .then(setSvgContent);
         }, 2500); // 3000 milliseconds = 3 seconds
       }
     }, 3500) // 3000 milliseconds = 3 seconds
 
 
   }, [isWebKit]);
+
+  // useEffect(() => {
+  //   fetch(`/robot_amb.svg?${Date.now()}`)
+  //     .then(res => res.text())
+  //     .then(setSvgContent);
+  // }, []);
+
+  useEffect(() => {
+    const handleGlobalMouseMove = (e) => {
+      const container = containerRef.current;
+      if (!container) return;
+      const lerp = (start, end, amt) => start + (end - start) * amt;
+
+      const svg = container.querySelector('svg');
+      const leftEye = container.querySelector('#es0NnFBPiAJ31_to');
+      const innerLeft = leftEye?.querySelector('g'); // this is the inner inverse-transform group
+      const leftblink = container.querySelector('#es0NnFBPiAJ42_to');
+      const leftblinkellipse = leftblink?.querySelector('ellipse');
+
+      const rightEye = container.querySelector('#es0NnFBPiAJ24_to');
+      const innerRight = rightEye?.querySelector('g'); // this is the inner inverse-transform group
+
+
+      if (!(svg instanceof SVGSVGElement)) return;
+
+      let currentXLeft = 0;
+      let currentXRight = 0;
+      let currentY = 0;
+      const pt = svg.createSVGPoint();
+      pt.x = e.clientX;
+      pt.y = e.clientY;
+      const svgPoint = pt.matrixTransform(svg.getScreenCTM()?.inverse());
+      const targetX = svgPoint.x;
+      const targetY = svgPoint.y;
+      currentXLeft = lerp(pt.x, -200, 0.0001);
+      currentY = lerp(pt.y, 200, 0.000000001);
+
+      currentXRight = lerp(pt.x, 200, -0.0001);
+
+     
+      leftEye.setAttribute('transform', `translate(${currentXLeft-1050}, ${currentY-650})`);
+      innerLeft.setAttribute('transform', `translate(${currentXLeft-1050}, ${currentY-650})`);
+      // leftblink.setAttribute('transform', `translate(${svgPoint.x}, ${svgPoint.y})`);
+      // leftblinkellipse.setAttribute('transform', `rotate(-76.56) translate(${svgPoint.x}, ${svgPoint.y})`);
+
+      rightEye.setAttribute('transform', `translate(${currentXRight-1450}, ${currentY-650})`);
+      innerRight.setAttribute('transform', `translate(${currentXRight-1450}, ${currentY-650})`);
+    };  
+    window.addEventListener('mousemove', handleGlobalMouseMove);
+
+      return () => {
+        window.removeEventListener('mousemove', handleGlobalMouseMove);
+      };
+  }, []);
 
   const languages = ["РУССКИЙ", "ENGLISH", "ESPAÑOL"];
   const current_lang = ["ЯЗЫК САЙТА: ", "LANGUAGE: ", "IDIOMA DEL SITIO: "];
@@ -86,7 +149,15 @@ export default function Home() {
         </div>
       </header>
       <div className="flex bg-white max-md:flex-col flex-row text-center justify-center items-center gap-[100px] max-md:gap-10 p-5 pt-20 ">
-          <Image src={svgLink} width={300} height={300} alt="robot" />
+          {!svgContent ? 
+          <Image src={svgLink} width={300} height={300} alt="robot" className="w-72 max-md:w-60" /> 
+          :
+          <div
+            ref={containerRef}
+            dangerouslySetInnerHTML={{ __html: svgContent }}
+            className="w-72 max-md:w-60"
+          />
+          }
           <div className={`flex flex-col gap-3 items-center transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
             <div className="font-bold">
               <h2 >Запишитесь на пробное занятие в IT-Школе</h2>
