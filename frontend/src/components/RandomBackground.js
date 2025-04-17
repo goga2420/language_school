@@ -11,7 +11,7 @@ const images = [
 ];
 
 function getRandomPosition() {
-  const top = Math.floor(Math.random() * 50); 
+  const top = Math.floor(Math.random() * 60); 
   const left = Math.floor(Math.random() * 100); 
   return { top: `${top}%`, left: `${left}%` };
 }
@@ -41,7 +41,7 @@ export default function RandomBackground() {
     };
 
     const scheduleNext = () => {
-      const nextIn = Math.random() * 1500;
+      const nextIn = Math.random() * 500;
       setTimeout(() => {
         addImage();
         scheduleNext();
@@ -57,15 +57,16 @@ export default function RandomBackground() {
         {bgItems.map(item => (
           <motion.div
             key={item.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 0 }}
+            animate={{ opacity: 1, y: [0, -5, 0] }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 4, repeat: Infinity, repeatType: "loop" }}
             className="absolute bg-contain bg-no-repeat bg-contain w-10 h-10 opacity-40"
             style={{
               backgroundImage: `url(${item.src})`,
               top: item.position.top,
               left: item.position.left,
+              willChange: "transform",
             }}
           />
         ))}

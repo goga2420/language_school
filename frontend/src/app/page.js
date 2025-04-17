@@ -125,7 +125,7 @@ export default function Home() {
   const languages = ["РУССКИЙ", "ENGLISH", "ESPAÑOL"];
   const current_lang = ["ЯЗЫК САЙТА: ", "LANGUAGE: ", "IDIOMA DEL SITIO: "];
   return (
-    <div className="bg-white">
+    <div className="">
       <header className="fixed flex justify-between w-full bg-white/40 p-3 max-md:p-0 backdrop-blur-md z-20">
         <div className="flex justify-left items-center">
           <Image className="items-left " src="/Itish.jpg" width={70} height={70} alt="Лого"/>
