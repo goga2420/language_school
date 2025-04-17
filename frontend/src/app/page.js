@@ -9,7 +9,7 @@ export default function Home() {
   const [selected, setSelected] = useState("Русский");
   const [selectedCurrent, setSelectedCurrent] = useState("ЯЗЫК САЙТА");
   const [isOpen, setIsOpen] = useState(false);
-  const [svgLink, setSvgLink] = useState('/images/robot.svg');
+  const [svgLink, setSvgLink] = useState('/language_school/images/robot.svg');
   const [fadeIn, setFadeIn] = useState(false);
 
   const containerRef = useRef(null);
@@ -30,16 +30,16 @@ export default function Home() {
   useEffect(() => {
     setTimeout(() => {
       if(isWebKit) {
-        setSvgLink(`/images/robot_amb.svg?${Date.now()}`); 
-        fetch(`/images/robot_amb.svg?${Date.now()}`)
+        setSvgLink(`/language_school/images/robot_amb.svg?${Date.now()}`); 
+        fetch(`/language_school/images/robot_amb.svg?${Date.now()}`)
           .then(res => res.text())
           .then(setSvgContent);
       }
       else {
-        setSvgLink(`/images/robot_start.svg?${Date.now()}`); // update svgLink after 3 seconds
+        setSvgLink(`/language_school/images/robot_start.svg?${Date.now()}`); // update svgLink after 3 seconds
         setTimeout(() => {
-          setSvgLink(`/images/robot_amb.svg?${Date.now()}`); // update svgLink after 3 seconds
-          fetch(`/images/robot_amb.svg?${Date.now()}`)
+          setSvgLink(`/language_school/images/robot_amb.svg?${Date.now()}`); // update svgLink after 3 seconds
+          fetch(`/language_school/images/robot_amb.svg?${Date.now()}`)
           .then(res => res.text())
           .then(setSvgContent);
         }, 2500); // 3000 milliseconds = 3 seconds
@@ -128,7 +128,7 @@ export default function Home() {
     <div className="">
       <header className="fixed flex justify-between w-full bg-white/40 p-3 max-md:p-0 backdrop-blur-md z-20">
         <div className="flex justify-left items-center">
-          <Image className="items-left " src="/images/Itish.jpg" width={70} height={70} alt="Лого"/>
+          <Image className="items-left " src="/language_school/images/Itish.jpg" width={70} height={70} alt="Лого"/>
           <h1 className="text-xl text-left text-black ">Айтишкино</h1>
         </div>
         <div className="flex justify-left items-center">

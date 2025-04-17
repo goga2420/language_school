@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const images = [
-  "/images/bg_icons/CPP.png", "/images/bg_icons/CSS3.png", "/images/bg_icons/HTML5.png", "/images/bg_icons/Java.png",
-  "/images/bg_icons/JS.png", "/images/bg_icons/Python.png", "/images/bg_icons/React.svg",
-  "/images/bg_icons/m1.png", "/images/bg_icons/m2.png", "/images/bg_icons/m3.png", "/images/bg_icons/m4.png",
-  "/images/bg_icons/m5.png", "/images/bg_icons/m6.png"
+  "/language_school/images/bg_icons/CPP.png", "/language_school/images/bg_icons/CSS3.png", "/language_school/images/bg_icons/HTML5.png", "/language_school/images/bg_icons/Java.png",
+  "/language_school/images/bg_icons/JS.png", "/language_school/images/bg_icons/Python.png", "/language_school/images/bg_icons/React.svg",
+  "/language_school/images/bg_icons/m1.png", "/language_school/images/bg_icons/m2.png", "/language_school/images/bg_icons/m3.png", "/language_school/images/bg_icons/m4.png",
+  "/language_school/images/bg_icons/m5.png", "/language_school/images/bg_icons/m6.png"
 ];
 
 function getRandomPosition() {
