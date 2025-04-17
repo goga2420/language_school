@@ -26,33 +26,33 @@ export default function Home() {
     setFadeIn(true);
   }, []);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if(isWebKit) {
-        setSvgLink(`/robot_amb.svg?${Date.now()}`); 
-        fetch(`/robot_amb.svg?${Date.now()}`)
-          .then(res => res.text())
-          .then(setSvgContent);
-      }
-      else {
-        setSvgLink(`/robot_start.svg?${Date.now()}`); // update svgLink after 3 seconds
-        setTimeout(() => {
-          setSvgLink(`/robot_amb.svg?${Date.now()}`); // update svgLink after 3 seconds
-          fetch(`/robot_amb.svg?${Date.now()}`)
-          .then(res => res.text())
-          .then(setSvgContent);
-        }, 2500); // 3000 milliseconds = 3 seconds
-      }
-    }, 3500) // 3000 milliseconds = 3 seconds
-
-
-  }, [isWebKit]);
-
   // useEffect(() => {
-  //   fetch(`/robot_amb.svg?${Date.now()}`)
-  //     .then(res => res.text())
-  //     .then(setSvgContent);
-  // }, []);
+  //   setTimeout(() => {
+  //     if(isWebKit) {
+  //       setSvgLink(`/robot_amb.svg?${Date.now()}`); 
+  //       fetch(`/robot_amb.svg?${Date.now()}`)
+  //         .then(res => res.text())
+  //         .then(setSvgContent);
+  //     }
+  //     else {
+  //       setSvgLink(`/robot_start.svg?${Date.now()}`); // update svgLink after 3 seconds
+  //       setTimeout(() => {
+  //         setSvgLink(`/robot_amb.svg?${Date.now()}`); // update svgLink after 3 seconds
+  //         fetch(`/robot_amb.svg?${Date.now()}`)
+  //         .then(res => res.text())
+  //         .then(setSvgContent);
+  //       }, 2500); // 3000 milliseconds = 3 seconds
+  //     }
+  //   }, 3500) // 3000 milliseconds = 3 seconds
+
+
+  // }, [isWebKit]);
+
+  useEffect(() => {
+    fetch(`/robot_amb.svg?${Date.now()}`)
+      .then(res => res.text())
+      .then(setSvgContent);
+  }, []);
 
   useEffect(() => {
     const handleGlobalMouseMove = (e) => {
@@ -79,21 +79,25 @@ export default function Home() {
       pt.x = e.clientX;
       pt.y = e.clientY;
       const svgPoint = pt.matrixTransform(svg.getScreenCTM()?.inverse());
-      const targetX = svgPoint.x;
-      const targetY = svgPoint.y;
       currentXLeft = lerp(pt.x, -200, 0.0001);
       currentY = lerp(pt.y, 200, 0.000000001);
+      const dist = Math.hypot(currentXLeft, currentY);
+      const W = 400;
+      const factorW = dist < W ? 1 : W / dist;
+      const H = 150;
+      const factorH = dist < H ? 1 : H / dist;
+
 
       currentXRight = lerp(pt.x, 200, -0.0001);
 
      
-      leftEye.setAttribute('transform', `translate(${currentXLeft-1050}, ${currentY-650})`);
-      innerLeft.setAttribute('transform', `translate(${currentXLeft-1050}, ${currentY-650})`);
+      leftEye.setAttribute('transform', `translate(${currentXLeft*factorW-950}, ${currentY*factorH-550})`);
+      innerLeft.setAttribute('transform', `translate(${currentXLeft*factorW-950}, ${currentY*factorH-550})`);
       // leftblink.setAttribute('transform', `translate(${svgPoint.x}, ${svgPoint.y})`);
       // leftblinkellipse.setAttribute('transform', `rotate(-76.56) translate(${svgPoint.x}, ${svgPoint.y})`);
 
-      rightEye.setAttribute('transform', `translate(${currentXRight-1450}, ${currentY-650})`);
-      innerRight.setAttribute('transform', `translate(${currentXRight-1450}, ${currentY-650})`);
+      rightEye.setAttribute('transform', `translate(${currentXRight*factorW-1350}, ${currentY*factorH-550})`);
+      innerRight.setAttribute('transform', `translate(${currentXRight*factorW-1350}, ${currentY*factorH-550})`);
     };  
     window.addEventListener('mousemove', handleGlobalMouseMove);
 
@@ -148,14 +152,14 @@ export default function Home() {
         )}
         </div>
       </header>
-      <div className="flex bg-white max-md:flex-col flex-row text-center justify-center items-center gap-[100px] max-md:gap-10 p-5 pt-20 ">
+      <div className="flex bg-white max-md:flex-col flex-row text-center justify-center items-center gap-[300px] max-md:gap-10 p-5 pt-20 ">
           {!svgContent ? 
           <Image src={svgLink} width={300} height={300} alt="robot" className="w-72 max-md:w-60" /> 
           :
           <div
             ref={containerRef}
             dangerouslySetInnerHTML={{ __html: svgContent }}
-            className="w-72 max-md:w-60"
+            className="w-72 max-md:w-60 mr-40"
           />
           }
           <div className={`flex flex-col gap-3 items-center transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
