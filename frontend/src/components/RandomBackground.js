@@ -41,7 +41,7 @@ export default function RandomBackground() {
     };
 
     const scheduleNext = () => {
-      const nextIn = Math.random() * 2000;
+      const nextIn = Math.random() * 1500;
       setTimeout(() => {
         addImage();
         scheduleNext();
@@ -52,7 +52,7 @@ export default function RandomBackground() {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden">
+    <div className="fixed inset-0 z-0 overflow-hidden opacity-20">
       <AnimatePresence>
         {bgItems.map(item => (
           <motion.div
@@ -61,7 +61,7 @@ export default function RandomBackground() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1 }}
-            className="absolute bg-contain bg-no-repeat bg-contain w-10 h-10"
+            className="absolute bg-contain bg-no-repeat bg-contain w-10 h-10 opacity-40"
             style={{
               backgroundImage: `url(${item.src})`,
               top: item.position.top,
