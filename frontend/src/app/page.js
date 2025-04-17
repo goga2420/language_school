@@ -79,25 +79,32 @@ export default function Home() {
       pt.x = e.clientX;
       pt.y = e.clientY;
       const svgPoint = pt.matrixTransform(svg.getScreenCTM()?.inverse());
-      currentXLeft = lerp(pt.x, -200, 0.0001);
-      currentY = lerp(pt.y, 200, 0.000000001);
-      const dist = Math.hypot(currentXLeft, currentY);
-      const W = 400;
-      const factorW = dist < W ? 1 : W / dist;
-      const H = 150;
-      const factorH = dist < H ? 1 : H / dist;
+      currentXLeft = lerp(pt.x, -200, 0.000001);
+      currentY = lerp(pt.y, 200, 0.00001);
+      const distL = Math.hypot(currentXLeft, currentY);
+      const W_LEFT  = 275;  // how far left
+      const W_RIGHT = 350;
+      const W = currentXLeft > 50 ? W_RIGHT : W_LEFT;
+      const factorWL = distL < W ? 1 : W / distL;
+      const H_TOP = 120;
+      const H_BOTTOM = 170;
+      const HL = currentY < -20 ? H_BOTTOM : H_TOP;
+      const factorHL = distL < HL ? 1 : HL / distL;
 
 
-      currentXRight = lerp(pt.x, 200, -0.0001);
+      currentXRight = lerp(pt.x, 200, -0.00001);
+      const distR = Math.hypot(currentXRight, currentY);
+      const WR = currentXLeft > -50 ? W_LEFT : W_RIGHT;
+      const factorWR = distR < W ? 1 : W / distR;
+      const HR = 140;
+      const factorHR = distR < HL ? 1 : HL / distR;
 
      
-      leftEye.setAttribute('transform', `translate(${currentXLeft*factorW-950}, ${currentY*factorH-550})`);
-      innerLeft.setAttribute('transform', `translate(${currentXLeft*factorW-950}, ${currentY*factorH-550})`);
-      // leftblink.setAttribute('transform', `translate(${svgPoint.x}, ${svgPoint.y})`);
-      // leftblinkellipse.setAttribute('transform', `rotate(-76.56) translate(${svgPoint.x}, ${svgPoint.y})`);
+      leftEye.setAttribute('transform', `translate(${currentXLeft*factorWL-1000}, ${currentY*factorHL-500})`);
+      innerLeft.setAttribute('transform', `translate(${currentXLeft*factorWL-1000}, ${currentY*factorHL-500})`);
 
-      rightEye.setAttribute('transform', `translate(${currentXRight*factorW-1350}, ${currentY*factorH-550})`);
-      innerRight.setAttribute('transform', `translate(${currentXRight*factorW-1350}, ${currentY*factorH-550})`);
+      rightEye.setAttribute('transform', `translate(${currentXRight*factorWR-1400}, ${currentY*factorHR-490})`);
+      innerRight.setAttribute('transform', `translate(${currentXRight*factorWR-1400}, ${currentY*factorHR-490})`);
     };  
     window.addEventListener('mousemove', handleGlobalMouseMove);
 
@@ -110,7 +117,7 @@ export default function Home() {
   const current_lang = ["ЯЗЫК САЙТА: ", "LANGUAGE: ", "IDIOMA DEL SITIO: "];
   return (
     <div className="bg-white">
-      <header className="fixed flex justify-between w-full bg-white p-3 max-md:p-0 backdrop-blur-md">
+      <header className="fixed flex justify-between w-full bg-white/40 p-3 max-md:p-0 backdrop-blur-md">
         <div className="flex justify-left items-center">
           <Image className="items-left " src="/Itish.jpg" width={70} height={70} alt="Лого"/>
           <h1 className="text-xl text-left text-black ">Айтишкино</h1>
