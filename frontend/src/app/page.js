@@ -2,13 +2,14 @@
 import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 import { ChevronDown, ChevronUp, Globe } from "lucide-react";
+import RandomBackground from "@/components/RandomBackground";
 
 
 export default function Home() {
   const [selected, setSelected] = useState("Русский");
   const [selectedCurrent, setSelectedCurrent] = useState("ЯЗЫК САЙТА");
   const [isOpen, setIsOpen] = useState(false);
-  const [svgLink, setSvgLink] = useState('/robot.svg');
+  const [svgLink, setSvgLink] = useState('/images/robot.svg');
   const [fadeIn, setFadeIn] = useState(false);
 
   const containerRef = useRef(null);
@@ -29,16 +30,16 @@ export default function Home() {
   useEffect(() => {
     setTimeout(() => {
       if(isWebKit) {
-        setSvgLink(`/robot_amb.svg?${Date.now()}`); 
-        fetch(`/robot_amb.svg?${Date.now()}`)
+        setSvgLink(`/images/robot_amb.svg?${Date.now()}`); 
+        fetch(`/images/robot_amb.svg?${Date.now()}`)
           .then(res => res.text())
           .then(setSvgContent);
       }
       else {
-        setSvgLink(`/robot_start.svg?${Date.now()}`); // update svgLink after 3 seconds
+        setSvgLink(`/images/robot_start.svg?${Date.now()}`); // update svgLink after 3 seconds
         setTimeout(() => {
-          setSvgLink(`/robot_amb.svg?${Date.now()}`); // update svgLink after 3 seconds
-          fetch(`/robot_amb.svg?${Date.now()}`)
+          setSvgLink(`/images/robot_amb.svg?${Date.now()}`); // update svgLink after 3 seconds
+          fetch(`/images/robot_amb.svg?${Date.now()}`)
           .then(res => res.text())
           .then(setSvgContent);
         }, 2500); // 3000 milliseconds = 3 seconds
@@ -125,7 +126,7 @@ export default function Home() {
   const current_lang = ["ЯЗЫК САЙТА: ", "LANGUAGE: ", "IDIOMA DEL SITIO: "];
   return (
     <div className="bg-white">
-      <header className="fixed flex justify-between w-full bg-white/40 p-3 max-md:p-0 backdrop-blur-md">
+      <header className="fixed flex justify-between w-full bg-white/40 p-3 max-md:p-0 backdrop-blur-md z-20">
         <div className="flex justify-left items-center">
           <Image className="items-left " src="/Itish.jpg" width={70} height={70} alt="Лого"/>
           <h1 className="text-xl text-left text-black ">Айтишкино</h1>
@@ -167,17 +168,18 @@ export default function Home() {
         )}
         </div>
       </header>
-      <div className="flex bg-white max-md:flex-col flex-row text-center justify-center items-center gap-[30px] max-md:gap-10 p-5 pt-40 ">
+      <div className="flex bg-white max-md:flex-col flex-row text-center justify-center items-center gap-[30px] max-md:gap-10 p-5 pt-40 z-20">
+      <RandomBackground />
           {!svgContent ? 
-          <Image src={svgLink} width={300} height={300} alt="robot" className="w-72 max-md:w-60 mr-40" /> 
+          <Image src={svgLink} width={300} height={300} alt="robot" className="w-72 max-md:w-60 mr-40 z-10" /> 
           :
           <div
             ref={containerRef}
             dangerouslySetInnerHTML={{ __html: svgContent }}
-            className="w-72 max-md:w-60 mr-40 max-md:mr-0"
+            className="w-72 max-md:w-60 mr-40 max-md:mr-0 z-10"
           />
           }
-          <div className={`flex flex-col gap-20 items-center transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
+          <div className={`z-10 flex flex-col gap-20 items-center transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
             <div className="font-bold">
               <h2 className="">Запишитесь на пробное занятие в IT-Школе!</h2>
             </div>
