@@ -26,33 +26,34 @@ export default function Home() {
     setFadeIn(true);
   }, []);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if(isWebKit) {
-  //       setSvgLink(`/robot_amb.svg?${Date.now()}`); 
-  //       fetch(`/robot_amb.svg?${Date.now()}`)
-  //         .then(res => res.text())
-  //         .then(setSvgContent);
-  //     }
-  //     else {
-  //       setSvgLink(`/robot_start.svg?${Date.now()}`); // update svgLink after 3 seconds
-  //       setTimeout(() => {
-  //         setSvgLink(`/robot_amb.svg?${Date.now()}`); // update svgLink after 3 seconds
-  //         fetch(`/robot_amb.svg?${Date.now()}`)
-  //         .then(res => res.text())
-  //         .then(setSvgContent);
-  //       }, 2500); // 3000 milliseconds = 3 seconds
-  //     }
-  //   }, 3500) // 3000 milliseconds = 3 seconds
-
-
-  // }, [isWebKit]);
-
   useEffect(() => {
-    fetch(`/robot_amb.svg?${Date.now()}`)
-      .then(res => res.text())
-      .then(setSvgContent);
-  }, []);
+    setTimeout(() => {
+      if(isWebKit) {
+        setSvgLink(`/robot_amb.svg?${Date.now()}`); 
+        fetch(`/robot_amb.svg?${Date.now()}`)
+          .then(res => res.text())
+          .then(setSvgContent);
+      }
+      else {
+        setSvgLink(`/robot_start.svg?${Date.now()}`); // update svgLink after 3 seconds
+        setTimeout(() => {
+          setSvgLink(`/robot_amb.svg?${Date.now()}`); // update svgLink after 3 seconds
+          fetch(`/robot_amb.svg?${Date.now()}`)
+          .then(res => res.text())
+          .then(setSvgContent);
+        }, 2500); // 3000 milliseconds = 3 seconds
+      }
+    }, 3500) // 3000 milliseconds = 3 seconds
+
+
+  }, [isWebKit]);
+
+  // useEffect(() => {
+  //   fetch(`/robot_amb.svg?${Date.now()}`)
+  //     .then(res => res.text())
+  //     .then(setSvgContent);
+  // }, []);
+
 
   useEffect(() => {
     const handleGlobalMouseMove = (e) => {
@@ -64,7 +65,7 @@ export default function Home() {
       const leftEye = container.querySelector('#es0NnFBPiAJ31_to');
       const innerLeft = leftEye?.querySelector('g'); // this is the inner inverse-transform group
       const leftblink = container.querySelector('#es0NnFBPiAJ42_to');
-      const leftblinkellipse = leftblink?.querySelector('ellipse');
+      const rightblink = container.querySelector('#es0NnFBPiAJ43_to');
 
       const rightEye = container.querySelector('#es0NnFBPiAJ24_to');
       const innerRight = rightEye?.querySelector('g'); // this is the inner inverse-transform group
@@ -79,32 +80,39 @@ export default function Home() {
       pt.x = e.clientX;
       pt.y = e.clientY;
       const svgPoint = pt.matrixTransform(svg.getScreenCTM()?.inverse());
-      currentXLeft = lerp(pt.x, -200, 0.000001);
-      currentY = lerp(pt.y, 200, 0.00001);
+      currentXLeft = lerp(pt.x, -200, 0.001);
+      currentY = lerp(pt.y, 200, 0.001);
       const distL = Math.hypot(currentXLeft, currentY);
-      const W_LEFT  = 275;  // how far left
+      const W_LEFT  = 200;  // how far left
       const W_RIGHT = 350;
-      const W = currentXLeft > 50 ? W_RIGHT : W_LEFT;
+      const W = currentXLeft > 400 ? W_RIGHT : W_LEFT;
       const factorWL = distL < W ? 1 : W / distL;
-      const H_TOP = 120;
-      const H_BOTTOM = 170;
-      const HL = currentY < -20 ? H_BOTTOM : H_TOP;
+      const H_TOP = 150;
+      const H_BOTTOM = 150;
+      const HL = currentY < 100 ? H_BOTTOM : H_TOP;
       const factorHL = distL < HL ? 1 : HL / distL;
 
 
       currentXRight = lerp(pt.x, 200, -0.00001);
       const distR = Math.hypot(currentXRight, currentY);
-      const WR = currentXLeft > -50 ? W_LEFT : W_RIGHT;
-      const factorWR = distR < W ? 1 : W / distR;
+      const WR = currentXLeft > 400 ? W_RIGHT : W_LEFT;
+      const factorWR = distR < WR ? 1 : WR / distR;
       const HR = 140;
       const factorHR = distR < HL ? 1 : HL / distR;
 
      
-      leftEye.setAttribute('transform', `translate(${currentXLeft*factorWL-1000}, ${currentY*factorHL-500})`);
-      innerLeft.setAttribute('transform', `translate(${currentXLeft*factorWL-1000}, ${currentY*factorHL-500})`);
+      leftEye.setAttribute('transform', `translate(${currentXLeft*factorWL-980}, ${currentY*factorHL-500})`);
+      innerLeft.setAttribute('transform', `translate(${currentXLeft*factorWL-980}, ${currentY*factorHL-500})`);
+      leftEye.style.transition = 'transform 0.2s linear';
+      innerLeft.style.transition = 'transform 0.2s linear';
 
-      rightEye.setAttribute('transform', `translate(${currentXRight*factorWR-1400}, ${currentY*factorHR-490})`);
-      innerRight.setAttribute('transform', `translate(${currentXRight*factorWR-1400}, ${currentY*factorHR-490})`);
+      leftblink.setAttribute('opacity', `0`);
+      rightblink.setAttribute('opacity', `0`);
+
+      rightEye.setAttribute('transform', `translate(${currentXRight*factorWR-1380}, ${currentY*factorHR-490})`);
+      innerRight.setAttribute('transform', `translate(${currentXRight*factorWR-1380}, ${currentY*factorHR-490})`);
+      rightEye.style.transition = 'transform 0.2s linear';
+      innerRight.style.transition = 'transform 0.2s linear';
     };  
     window.addEventListener('mousemove', handleGlobalMouseMove);
 
@@ -161,12 +169,12 @@ export default function Home() {
       </header>
       <div className="flex bg-white max-md:flex-col flex-row text-center justify-center items-center gap-[30px] max-md:gap-10 p-5 pt-40 ">
           {!svgContent ? 
-          <Image src={svgLink} width={300} height={300} alt="robot" className="w-72 max-md:w-60" /> 
+          <Image src={svgLink} width={300} height={300} alt="robot" className="w-72 max-md:w-60 mr-40" /> 
           :
           <div
             ref={containerRef}
             dangerouslySetInnerHTML={{ __html: svgContent }}
-            className="w-72 max-md:w-60 mr-40"
+            className="w-72 max-md:w-60 mr-40 max-md:mr-0"
           />
           }
           <div className={`flex flex-col gap-20 items-center transition-opacity duration-1000 ${fadeIn ? 'opacity-100' : 'opacity-0'}`}>
