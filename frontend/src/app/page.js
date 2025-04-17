@@ -128,7 +128,7 @@ export default function Home() {
     <div className="">
       <header className="fixed flex justify-between w-full bg-white/40 p-3 max-md:p-0 backdrop-blur-md z-20">
         <div className="flex justify-left items-center">
-          <Image className="items-left " src="/Itish.jpg" width={70} height={70} alt="Лого"/>
+          <Image className="items-left " src="/images/Itish.jpg" width={70} height={70} alt="Лого"/>
           <h1 className="text-xl text-left text-black ">Айтишкино</h1>
         </div>
         <div className="flex justify-left items-center">
